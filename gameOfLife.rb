@@ -109,15 +109,51 @@ dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1],
 
 # puts 'Hello, world!'
 # a = Array.new(3) { Array.new(2) { 0 } }
-grid = [[0,0,0,0,1,0,0,0],
-        [0,0,0,0,0,1,0,0],
-        [0,0,0,1,1,1,0,0],
-        [0,0,0,0,0,0,0,0]]
+# grid = [[0,0,0,0,1,0,0,0],
+#         [0,0,0,0,0,1,0,0],
+#         [0,0,0,1,1,1,0,0],
+#         [0,0,0,0,0,0,0,0]]
 
 # printGrid(grid, 0)
 # #grid = getNext(grid, dirs)
 # grid = getNextInplace(grid, dirs)
 # printGrid(grid, 1)
+
+
+
+######################################### PARSE FILE ###########################
+currentDir = Dir.pwd
+# puts currentDir
+# puts Dir.exists?(currentDir)
+# puts File.exists?(currentDir + "/input.txt")
+# exit()
+
+count, rows, cols = 0, 0, 0
+grid = nil
+File.foreach(currentDir + "/input.txt") { |line|
+  #puts count.to_s + '. ' + line
+  count += 1
+
+  case count
+    when 1 then
+      puts "header ..OK"
+      next
+    when 2 then
+      rows, cols = line.split(" ")
+      grid = Array.new(rows.to_i) { Array.new(cols.to_i) { 0 } }
+      next
+
+    else # for all the following lines
+      # fill the array
+      for c in 0...cols.to_i do
+        #puts "  count - 3:" + (count - 3).to_s
+        #puts "  c: " + c.to_s
+        grid[count - 3][c] = line[c] == "." ? 0 : 1
+      end
+  end
+}
+
+
 
 ######################################### MAIN LOOP ############################
 count = 0
