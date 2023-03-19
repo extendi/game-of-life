@@ -1,3 +1,5 @@
+require 'io/console'
+
 def printGrid(grid, generation)
     rows, cols = grid.size, grid[0].size
     #puts('rows, cols: ' + rows.to_s + ', ' + cols.to_s)
@@ -112,7 +114,24 @@ grid = [[0,0,0,0,1,0,0,0],
         [0,0,0,1,1,1,0,0],
         [0,0,0,0,0,0,0,0]]
 
-printGrid(grid, 0)
-#grid = getNext(grid, dirs)
-grid = getNextInplace(grid, dirs)
-printGrid(grid, 1)
+# printGrid(grid, 0)
+# #grid = getNext(grid, dirs)
+# grid = getNextInplace(grid, dirs)
+# printGrid(grid, 1)
+
+######################################### MAIN LOOP ############################
+count = 0
+loop do
+  printGrid(grid, count)
+  puts 'press spacebar to continue, escape to exit'
+
+  case $stdin.getch
+    when "\s"  then
+      #puts 'space'
+      grid = getNextInplace(grid, dirs)
+      count += 1
+    when "\e"  then
+      #puts 'escape'
+      exit
+  end
+end
