@@ -103,6 +103,16 @@ def getNextInplace(grid, dirs)
     return grid
 end
 
+def is_integer(string)
+  string.to_i.to_s == string
+end
+
+def badFormat()
+  puts
+  puts 'ERROR: bad input format'
+  exit
+end
+
 ################################################################################
 dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1],
   [-1, -1], [-1, 1], [1, -1]]
@@ -119,18 +129,15 @@ dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1],
 # grid = getNextInplace(grid, dirs)
 # printGrid(grid, 1)
 
-
-
 ######################################### PARSE FILE ###########################
 currentDir = Dir.pwd
 # puts currentDir
 # puts Dir.exists?(currentDir)
-# puts File.exists?(currentDir + "/input.txt")
-# exit()
+# puts File.exists?(currentDir + "input.txt")
 
 count, rows, cols = 0, 0, 0
-grid = nil
-File.foreach(currentDir + "/input.txt") { |line|
+grid = nil #NIL
+File.foreach(currentDir + "/mike.txt") { |line|
   #puts count.to_s + '. ' + line
   count += 1
 
@@ -140,20 +147,31 @@ File.foreach(currentDir + "/input.txt") { |line|
       next
     when 2 then
       rows, cols = line.split(" ")
+      # check if rows and cols are valid numbers
+      # if this is the case initialize the array
+      if not (is_integer(rows) && is_integer(cols))
+        badFormat()
+      end
+      puts "rows: " + rows.to_s + " cols: " + cols.to_s + " ..OK"
       grid = Array.new(rows.to_i) { Array.new(cols.to_i) { 0 } }
       next
 
     else # for all the following lines
+      #puts 'size:' + (line.size - 1).to_s
+      if line.size - 1 != cols.to_i
+        badFormat()
+      end
       # fill the array
       for c in 0...cols.to_i do
         #puts "  count - 3:" + (count - 3).to_s
         #puts "  c: " + c.to_s
+        if line[c] != '.' and line[c] != '*'
+          badFormat()
+        end
         grid[count - 3][c] = line[c] == "." ? 0 : 1
       end
   end
 }
-
-
 
 ######################################### MAIN LOOP ############################
 count = 0
